@@ -1,8 +1,8 @@
-export default function Screen() {
+export default function Screen({screenDisplay}) {
     return (
         <section id="screenSection">
             <div id="screen"> {/* actual screen */}
-                <p>_</p>
+                <p>{screenDisplay}</p>
             </div>
             <div id="acBtnDiv">
                 <button>AC</button> {/* ALL CLEAR key */}
