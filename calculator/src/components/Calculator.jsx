@@ -3,32 +3,64 @@ import { useState } from "react";
 import Screen from "./Screen.jsx";
 import Keys from "./Keys.jsx";
 
-let digit; //to save the digit just clicked (either number or ".")
-let number = ''; //to save the number made with the combination of digits clicked 
-
 export default function Calculator() {
-    const [screenDisplay, setScreenDisplay] = useState("_"); //stores what's shown on screen
+    const [equation, setEquation] = useState([]); //stores all the numbers and symbols of the equation
+    const [dotLocked, setDotLocked] = useState(false); //turns "true" if the "." button has already been clicked for the number currently being typed
 
+    /**
+     * when a button of a number is clicked, this function adds the number the "equation" array that is both used to, in the future, count the result of the equation, and also to add the numbers and operators to the screen display
+     * @param {*} nbr number of the button clicked
+     */
     function nbrClicked(nbr) {
-        digit = nbr;
-        number += nbr
-        
-        /* Changes what is stored on screen
-        (since it's a useState variable, its change will force the "Screen" component to be updated) */
-        if (screenDisplay == "_") {
-            setScreenDisplay(nbr)
+        if (nbr != ".") {
+            setEquation(prevEquation => [...prevEquation, nbr]) // pushes "nbr" to the useState "equation" array
         } else {
-            setScreenDisplay(wasScreenDisplay => wasScreenDisplay + nbr)
+            if (nbr == "." && !dotLocked) {
+                setDotLocked(true);
+                setEquation(prevEquation => [...prevEquation, nbr]) // pushes "nbr" to the useState "equation" array
+            }
         }
+        
+        // debug:
+        console.log(nbr);
+        console.log(equation);
     }
 
+    /**
+     * adds symbol to the screen and allows the user to switch between symbols before adding a new number to the screen
+     * @param {*} symbol 
+     */
     function symbolClicked(symbol) {
         console.log(symbol);
+
+        if (equation.length > 0) { //the first character of the equation CAN'T be a symbol
+            if (symbol.name == "Equal") { //if the symbol pressed is "="...
+                setEquation(prevEquation =>
+                    [...prevEquation, `=${eval(prevEquation.join(''))}`] //adds to the array of the equation "=" and its result
+                )
+            } else {
+                if (equation[equation.length-1] != "*"
+                    && equation[equation.length-1] != "/"
+                    && equation[equation.length-1] != "+"
+                    && equation[equation.length-1] != "-"
+                ) { // if the last character on the equation wasn't an operator symbol...
+                    setEquation(prevEquation => [...prevEquation, symbol.op]); // pushes "symbol" to the useState "equation" array
+                    setDotLocked(false);
+
+                } else { // if it was...
+                    setEquation(prevEquation =>
+                        prevEquation.map((item, pos) => 
+                            pos == prevEquation.length - 1 ? symbol.op : item
+                        )
+                    )
+                }
+            }
+        }
     }
 
     return (
         <main>
-            <Screen screenDisplay={screenDisplay}/>
+            <Screen screenDisplay={equation.length == 0 ? "_" : equation.join('')}/>
             <Keys nbrClicked={nbrClicked} symbolClicked={symbolClicked}/>
         </main>
     )
