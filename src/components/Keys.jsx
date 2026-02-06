@@ -1,3 +1,16 @@
+import { styled } from "styled-components";
+
+const BtnNbr = styled.button`
+    background-color: #818181;
+    margin: 0.2rem;
+`;
+
+const BtnSymbols = styled.button`
+    background-color: #587113;
+    color: #fff;
+    margin: 0.2rem;
+`;
+
 export default function Keys({nbrClicked, symbolClicked}) {
     function eachRow() {
         let rows = []
@@ -23,19 +36,19 @@ export default function Keys({nbrClicked, symbolClicked}) {
             let buttons = [];
 
             for (let j = 1; j <= 4; j++) {
-                if (j != 4) {
+                if (j != 4) { {/* if it isn't the last column = numbers */}
                     buttons.push(
-                        <button key={`btn${j + (i-1) * 3}`}
+                        <BtnNbr key={`btn${j + (i-1) * 3}`}
                                 onClick={() => nbrClicked((j + (i-1) * 3).toString())}>
                             {j + (i-1) * 3}
-                        </button>
+                        </BtnNbr>
                     );
-                } else {
+                } else { {/* last column = symbols */}
                     buttons.push(
-                        <button key={`op${operator.name}`}
+                        <BtnSymbols key={`op${operator.name}`}
                                 onClick={() => symbolClicked(operator[i-1])}>
                             {operator[i-1].display}
-                        </button>
+                        </BtnSymbols>
                     );
                 }
             }
@@ -55,14 +68,14 @@ export default function Keys({nbrClicked, symbolClicked}) {
             {eachRow()} {/* 1st, 2nd and 3rd row */}
             
             <div className="row"> {/* 4th row */}
-                <button onClick={() => nbrClicked("0")}>0</button>
-                <button onClick={() => nbrClicked(".")}>.</button>
-                <button onClick={() => symbolClicked({display: "=",
+                <BtnNbr onClick={() => nbrClicked("0")}>0</BtnNbr>
+                <BtnNbr onClick={() => nbrClicked(".")}>.</BtnNbr>
+                <BtnSymbols onClick={() => symbolClicked({display: "=",
                                                       op: "=",
-                                                      name: "Equal"})}>=</button>
-                <button onClick={() => symbolClicked({display: "×",
+                                                      name: "Equal"})}>=</BtnSymbols>
+                <BtnSymbols onClick={() => symbolClicked({display: "×",
                                                       op: "*",
-                                                      name: "Multiplication"})}>×</button>
+                                                      name: "Multiplication"})}>×</BtnSymbols>
             </div>
         </section>
     )
