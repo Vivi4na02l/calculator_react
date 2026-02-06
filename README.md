@@ -16,3 +16,8 @@ A simple calculator built with React to practice component-based architecture an
 ## What I focused on
 * Separating logic into reusable components
 * Keeping state predictable and easy to follow
+
+## How to open
+URL: https://vivi4na02l.github.io/calculator_react/
+
+### Calculator icon from Flaticon.com
